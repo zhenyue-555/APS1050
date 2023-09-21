@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Pet's Shop</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+<body onload="load()">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Pet Shop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="unadopt.html"><i class="fas fa-paw"></i> Unadopted</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="adopt.html"><i class="fas fa-heart"></i> Adopted</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.html"><i class="fas fa-user-plus"></i> Registration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="update.html"><i class="fas fa-edit"></i> Update</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="statistics.html"><i class="fas fa-chart-bar"></i> Statistics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="delete.html"><i class="fas fa-trash"></i> Delete</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<div class="container">
+    <div id="petsRow" class="row">
+        <!-- PETS LOAD HERE -->
+    </div>
+</div>
+
+<div id="petTemplate" style="display: none;">
+    <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="panel panel-default panel-pet">
+            <div class="panel-heading">
+                <h3 class="panel-title">Scrappy</h3>
+            </div>
+            <div class="panel-body">
+                <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;"
+                     src="https://animalso.com/wp-content/uploads/2017/01/Golden-Retriever_6.jpg"
+                     data-holder-rendered="true"
+                     width="300" height="300">
+                <br/><br/>
+                <strong>Breed</strong>: <span class="pet-breed">Golden Retriever</span><br/>
+                <strong>Age</strong>: <span class="pet-age">3</span><br/>
+                <strong>Location</strong>: <span class="pet-location">Warren, MI</span><br/><br/>
+                <!-- use btn-return to trigger handleReturn function in app.js -->
+                <button class="btn btn-primary btn-return" type="button" data-id="0">Return</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/web3.min.js"></script>
+<script src="js/truffle-contract.js"></script>
+<script src="js/app.js"></script>
+<script>
+    function load() {
+        setTimeout(() => {
+            App.getPets()
+        }, 300)
+        setTimeout(() => {
+            var petsRow = $('#petsRow');
+            var param = new URLSearchParams(window.location.search)
+            var petTemplate = $('#petTemplate');
+            var breed = param.get("breed")
+            var age = param.get("age")
+            var location = param.get("location")
+            var data = pets
+            for (i = 0; i < data.length; i++) {
+                if (data[i].status === '0x0000000000000000000000000000000000000000') {
+                    continue
+                }
+
+                if (breed !== null && breed !== "" && data[i].breed !== breed) {
+                    continue
+                }
+
+                if (age !== null && age !== "" && data[i].age.toString() !== age) {
+                    continue
+                }
+
+                if (location !== null && location !== "" && data[i].location.search(location) === -1) {
+                    continue
+                }
+
+
+                petTemplate.find('.panel-title').text(data[i].name);
+                petTemplate.find('img').attr('src', data[i].picture);
+                petTemplate.find('.pet-breed').text(data[i].breed);
+                petTemplate.find('.pet-age').text(data[i].age);
+                petTemplate.find('.pet-location').text(data[i].location);
+                petTemplate.find('.btn-return').attr('data-id', data[i].id);
+
+                petsRow.append(petTemplate.html());
+            }
+        }, 1000)
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pet's Shop</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        canvas {
+            max-width: 300px;
+            max-height: 300px;
+            display: block; 
+            margin: auto;
+        }
+    </style>
+
+</head>
+<body onload="load()">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Pet's Shop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="unadopt.html"><i class="fas fa-paw"></i> Unadopted</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="adopt.html"><i class="fas fa-heart"></i> Adopted</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.html"><i class="fas fa-user-plus"></i> Registration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="update.html"><i class="fas fa-edit"></i> Update</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="statistics.html"><i class="fas fa-chart-bar"></i> Statistics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="delete.html"><i class="fas fa-trash"></i> Delete</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+<main class="container mt-4">
+    <div class="text-center">
+        <h2>Statistics</h2>
+        <canvas id="petBreedChart" style="width: 300px; height: 300px;"></canvas>
+        <canvas id="petAgeChart" style="width: 300px; height: 300px;"></canvas>
+    
+    </div>
+    
+    <!--Under Construction-->
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Pet Name</th>
+                <th>Vote Count</th>
+            </tr>
+        </thead>
+        <tbody id="petsTable">
+            <!-- Rows will be added dynamically -->
+        </tbody>
+    </table>
+
+    
+    <hr>
+    
+
+
+</main>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/web3.min.js"></script>
+<script src="js/truffle-contract.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+    // Under Construction
+    function load() {
+        setTimeout(() => {
+            App.getPets()
+        }, 300)
+        setTimeout(() => {
+            var petsRow = $('#petsRow');
+            var param = new URLSearchParams(window.location.search)
+            var petTemplate = $('#petTemplate');
+            var breed = param.get("breed")
+            var age = param.get("age")
+            var location = param.get("location")
+            var data = pets
+            var petBreedList = new Array();
+            var petAgeList = {};
+            var adoptedPetTotalAmount = 0;
+            var flag = 1;
+            var petList = new Set();
+
+            for (i = 0; i < data.length; i++) {
+                if (data[i].status === '0x0000000000000000000000000000000000000000') {
+                    continue
+                }
+
+                if (breed !== null && breed !== "" && data[i].breed !== breed) {
+                    continue
+                }
+
+                if (age !== null && age !== "" && data[i].age.toString() !== age) {
+                    continue
+                }
+
+                if (location !== null && location !== "" && data[i].location.search(location) !== -1) {
+                    continue
+                }
+                adoptedPetTotalAmount++;
+
+                // Count adopted pet amount by breed
+                for (j = 0; j < petBreedList.length; j++) {
+                    if (petBreedList[j][0] == data[i].breed) {
+                        petBreedList[j][1]++;
+                        flag = 0;
+                        break;
+                    }
+                    
+                }
+                // Count adopted pet amount by age
+                if (!petAgeList[data[i].age]) {
+                        petAgeList[data[i].age] = 0;
+                    }
+                    petAgeList[data[i].age]++;
+
+
+
+                if (flag == 1) {
+                    petBreedList.push(new Array(3));
+                    petBreedList[petBreedList.length - 1][0] = data[i].breed.toString();
+                    petBreedList[petBreedList.length - 1][1] = 1;
+                } else {
+                    flag = 1;
+                }
+            }
+
+            petBreedList.sort(function (a, b) {
+                return b[1] - a[1]
+            });
+            for (i = 0; i < petBreedList.length; i++) {
+                petBreedList[i][2] = (100 * petBreedList[i][1] / adoptedPetTotalAmount).toFixed(2);
+            }
+
+            if (petBreedList.length == 0) {
+                petBreedList.push(['N/A', 'N/A', 'N/A'])
+            }
+
+            var petsTable = $('#petsTable');
+            petsTable.empty();
+            for (const element of pets) {
+                var row = `
+                <tr>
+                    <td>${element.name}</td>
+                    <td>${element.votes}</td>
+                </tr>`;
+
+                petsTable.append(row);
+            }
+
+            // Generate pie chart
+            var ctx = document.getElementById('petBreedChart').getContext('2d');
+            var breeds = petBreedList.map(row => row[0]);
+            var counts = petBreedList.map(row => row[1]);
+
+            var ctxAge = document.getElementById('petAgeChart').getContext('2d');
+            var ages = Object.keys(petAgeList);
+            var ageCounts = Object.values(petAgeList);
+
+            var agePieChart = new Chart(ctxAge, {
+                type: 'pie',
+                data: {
+                    labels: ages,
+                    datasets: [{
+                        data: ageCounts,
+                        backgroundColor: ['pink', 'gold', 'green', 'yellow', 'purple', 'orange', 'cyan'] 
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Adoption by Age Pie Chart'
+                        }
+                    }
+                }
+            });
+
+
+            var pieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: breeds,
+                    datasets: [{
+                        data: counts,
+                        backgroundColor: ['red', 'blue', 'green', 'yellow', 'purple', 'orange', 'cyan']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Adoption by breed Pie Chart'
+                        }
+                    }
+                }
+            });
+
+        }, 1000)
+    }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Pet's Shop</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+
+    </head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Pet Shop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="unadopt.html"><i class="fas fa-paw"></i> Unadopted</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="adopt.html"><i class="fas fa-heart"></i> Adopted</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.html"><i class="fas fa-user-plus"></i> Registration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="update.html"><i class="fas fa-edit"></i> Update</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="statistics.html"><i class="fas fa-chart-bar"></i> Statistics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="delete.html"><i class="fas fa-trash"></i> Delete</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+<main class="container">
+    <div align="center">
+        <form class="row g-3 p-4" style="background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" class="form-control" id="name" placeholder="Name">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-birthday-cake"></i></span>
+                    <input type="text" class="form-control" id="age" placeholder="Age">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-dog"></i></span>
+                    <input type="text" class="form-control" id="breed" placeholder="Breed">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                    <input type="text" class="form-control" id="location" placeholder="Location">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-image"></i></span>
+                    <input type="text" class="form-control" id="picture" placeholder="Image URL" oninput="displayImage()">
+                </div>
+                <img id="displayedImage" src="" alt="Selected Image" style="display: none; margin-top: 10px; max-width: 300px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            </div>
+            
+            <div class="mb-3 d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary mb-3 btn-register">Register</button>
+            </div>
+        </form>
+    
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('picture').addEventListener('input', function() {
+                const imageUrl = this.value;
+                const imageElement = document.getElementById('displayedImage');
+                if (imageUrl) {
+                    imageElement.src = imageUrl;
+                    imageElement.style.display = 'block';
+                } else {
+                    imageElement.style.display = 'none';
+                }
+            });
+        });
+        </script>
+
+</main>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/web3.min.js"></script>
+<script src="js/truffle-contract.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

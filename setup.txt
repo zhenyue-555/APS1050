@@ -1,0 +1,25 @@
+Versions
+Node.js: 17.4.0
+lite-server: 2.3.0
+Solidity: 0.5.0
+web3: 1.7.4
+Truffle: 5.5.24
+Ganache: 2.5.4
+Setup Steps:
+
+1. Install Required Packages:
+npm install
+
+2. Initialize Ganache and Set Up MetaMask:
+Launch Ganache, then select QUICKSTART to generate new accounts. Use the mnemonic phrase from Ganache to configure MetaMask and set its network port to 7545.
+
+3. Prepare Project for Deployment:
+If the 'build' directory exists, remove it. Next, compile and set up your project.
+truffle compile
+truffle migrate
+
+4. Start the project:
+npm run dev
+
+To test:
+truffle test
